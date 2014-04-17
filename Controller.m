@@ -32,11 +32,16 @@
     SFPasswordAssistantInspectorController *pwAsst;
     NSMenu *menu;
     NSStatusItem *statusItem;
+    
+    NSWindow *window;
+	NSSecureTextField *secureTextField;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
     // Get icon from bundle and create image of the right size
+    window = [[NSWindow alloc] init];
+    secureTextField = [[NSSecureTextField alloc] init];
     
     NSURL* iconURL = [[NSBundle mainBundle] URLForResource:@"Unlock-256" withExtension:@"icns"];
     NSImage* image = [[NSImage alloc] initWithContentsOfURL:iconURL];
@@ -59,6 +64,8 @@
     }
     
     pwAsst = [[SFPasswordAssistantInspectorController alloc] init];
+    [pwAsst setBaseWindow:window];
+    [pwAsst setNewPasswordField: secureTextField];
     
     // Load the nib to force pwAsst to create its panel without showing the panel to the
     // user.  Then hide the panel by setting its alpha to zero, before doing the normal
