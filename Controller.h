@@ -29,6 +29,8 @@
 
 @interface Controller : NSObject <NSApplicationDelegate>
 
+@property IBOutlet NSMenu *menu;
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification;
 
 - (IBAction)showPasswordAssistantPanel:(id)sender;

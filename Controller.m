@@ -30,7 +30,6 @@
 
 @implementation Controller {
     SFPasswordAssistantInspectorController *pwAsst;
-    NSMenu *menu;
     NSStatusItem *statusItem;
     
     NSWindow *window;
@@ -49,14 +48,20 @@
     [image setSize:NSMakeSize(statusBarThickness, statusBarThickness)];
     
     // Init statusItem:
+    [[NSBundle mainBundle] loadNibNamed:@"MainMenu"
+                                  owner:self
+                        topLevelObjects:nil];
     
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
     [statusItem setImage: image];
     [statusItem setToolTip:@"Password Assistant"];
     [statusItem setHighlightMode:YES];
-    [statusItem setTarget:self];
-    [statusItem setAction:@selector(showPasswordAssistantPanel:)];
+    //[statusItem setTarget:self];
+
+    [statusItem setMenu:self.menu];
+    //[statusItem setAction:@selector(showPasswordAssistantPanel:)];
 }
+
 
 - (IBAction)showPasswordAssistantPanel:(id)sender {
     if (pwAsst) {
@@ -76,19 +81,13 @@
     [[pwAsst panel] setAlphaValue:0];
     [pwAsst showPasswordAssistantPanel:sender];
     
-
-    // Place the panel directly underneat the status bar icon.
-    if (sender && [sender isKindOfClass:[NSView class]]) {
-        NSPanel* panel = [pwAsst panel];
-        NSRect frame = [panel convertRectFromScreen:[[sender window] convertRectToScreen:[sender frame]]];
-        NSPoint topLeft = frame.origin;
-        topLeft.y += frame.size.height;
-        [panel setFrameTopLeftPoint:topLeft];
-    }
+    NSPanel* panel = [pwAsst panel];
+    [panel center];
     
     // Once the panel is set up in the right place, show it to the user.
     [[pwAsst panel] setAlphaValue:1];
     [[pwAsst panel] makeKeyAndOrderFront:sender];
 }
+
 
 @end
